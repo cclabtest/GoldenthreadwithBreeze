@@ -1,0 +1,175 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title></title>
+</head>
+
+<body ng-app="app" >
+
+    <div ng-controller="MainController as vm">
+        <h1>{{vm.title}}</h1>
+        <h3>{{vm.message}}</h3>
+
+        <ul>
+            <li ng-repeat="order in vm.orders">
+                [{{order.ID}}] {{order.Title}}
+            </li>
+        </ul>
+
+    </div>
+    <div ng-controller="MainController as voice">
+        <h1>{{voice.title}}</h1>
+        <h3>{{voice.message}}</h3>
+
+        <ul>
+            <li ng-repeat="v in voice.Voices">
+                [{{v.ID}}] | {{v.ChapterTitle}} | {{v.Tag}}
+            </li>
+        </ul>
+        </div> 
+
+
+
+        <script src="~/Scripts/q.js"></script>
+
+        <script src="~/Scripts/angular.js"></script>
+        <script src="https://rawgithub.com/Breeze/breeze.js/master/build/breeze.debug.js"></script>
+        <script src="https://rawgithub.com/Breeze/breeze.js/master/build/adapters/breeze.bridge.angular.js"></script>
+
+        <!-- The App -->
+        <script>
+
+            (function () {
+
+                // define the app module which depends upon the "breeze.angular" service
+                angular.module('app', ['breeze.angular'])
+                       .controller('MainController', MainController);
+
+                //angular.extend(request.headers, {'AuthToken': '73DE4898-C1D3-42A4-B802-0B81F1E3867F'});
+                ///////////////////////
+
+                function MainController(breeze, $q) {
+                    var vm = this;
+                    var voice = this;
+                    vm.message = 'Waiting for server to respond with orders ...';
+                    vm.title = 'Hello Breeze and Angular!';
+                    vm.orders = [];
+
+
+                    voice.message = 'Waiting for server to respond with chapter voice ...';
+                    voice.title = 'Hello Voice chapter Breeze and Angular!';
+                    voice.Voices = [];
+
+                    activate();
+
+                    activate1();
+                    ////////////
+
+                    function activate() {
+                        var metadataStore = new breeze.MetadataStore();
+
+                        //metadataStore.importMetadata(metadata);
+                        //  $http.defaults.headers.common['Authorization'] = 'Bearer...';
+                        // create a new manager talking to sample service
+                        //var host="http://sampleservice.breezejs.com";
+                        //var serviceName = host+"/api/northwind";
+                        var host = "http://192.168.100.21:91";
+                        var serviceName = host + "/api/Chapters";
+
+                        var ds = new breeze.DataService({
+                            serviceName: serviceName,
+                            hasServerMetadata: false
+                        });
+                        var manager = new breeze.EntityManager({
+                            dataService: ds
+                        });
+
+                        var ajaxAdapter = breeze.config.getAdapterInstance('ajax');
+                        ajaxAdapter.defaultSettings = {
+                            headers: { "AuthToken": "73DE4898-C1D3-42A4-B802-0B81F1E3867F" },
+                        };
+
+                        //manager.fetchMetadata();
+                        breeze.EntityQuery
+                          .from('Get')
+                          .top(4)
+                          .where("Title", "startsWith", "A")
+                          .orderBy('Title')
+                          .using(manager).execute()
+                          .then(success).catch(failed);
+                    }
+
+
+                    function activate1() {
+
+                        var host = "http://localhost:51341";
+                        var serviceName = host + "/api/Chapters";
+
+                        var ds = new breeze.DataService({
+                            serviceName: serviceName,
+                            hasServerMetadata: false
+                        });
+                        var manager = new breeze.EntityManager({
+                            dataService: ds
+                        });
+
+                        var ajaxAdapter = breeze.config.getAdapterInstance('ajax');
+                        ajaxAdapter.defaultSettings = {
+                            headers: { "AuthToken": "73DE4898-C1D3-42A4-B802-0B81F1E3867F" },
+                        };
+
+                        //manager.fetchMetadata();
+                        breeze.EntityQuery
+                          .from('GetVoices')
+                          .withParameters({ 'id': 20 })
+                          .top(4)
+                          .where("ChapterTitle", "startsWith", "A")
+                          .orderBy('ChapterTitle')
+                          .using(manager).execute()
+                          .then(success1).catch(failed1);
+                    }
+
+
+
+                    function success(data) {
+                        vm.orders = data.results;
+                        var msg = ('Queried ' + vm.orders.length + ' orders');
+                        vm.message = msg;
+                        console.log(msg);
+                    }
+
+                    function failed(error) {
+                        var msg = "Query failed: " + error.message;
+                        vm.message = msg;
+                        console.log(msg);
+                    }
+
+
+                    function success1(data) {
+                        voice.Voices = data.results;
+
+                        var msg = ('Queried ' + voice.Voices.length + ' Voices');
+                        voice.message = msg;
+                        console.log(msg);
+                    }
+
+                    function failed1(error) {
+                        var msg = "Query failed: " + error.message;
+                        voice.message = msg;
+                        console.log(msg);
+                    }
+                }
+            }());
+
+
+
+
+        </script>
+</body>
+</html>

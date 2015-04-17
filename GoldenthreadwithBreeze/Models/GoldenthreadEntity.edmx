@@ -1,0 +1,650 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GoldenThreadModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="APIKey" Type="uniqueidentifier" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" />
+          <Property Name="IDFacebook" Type="nvarchar" MaxLength="200" />
+          <Property Name="IDTwitter" Type="nvarchar" MaxLength="200" />
+          <Property Name="IDGoogle" Type="nvarchar" MaxLength="200" />
+          <Property Name="IDInstagram" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Chapter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDApp" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tag" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="SALT" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Voice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthorID" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar" MaxLength="50" />
+          <Property Name="Video" Type="nvarchar" MaxLength="50" />
+          <Property Name="Text" Type="nvarchar(max)" />
+          <Property Name="IDChapter" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifyBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="IDTag" Type="int" />
+        </EntityType>
+        <Association Name="FK_Author_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Author" Type="Self.Author" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Author">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chapter_Application">
+          <End Role="Application" Type="Self.Application" Multiplicity="1" />
+          <End Role="Chapter" Type="Self.Chapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chapter">
+              <PropertyRef Name="IDApp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Author">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Chapter">
+          <End Role="Chapter" Type="Self.Chapter" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chapter">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="IDChapter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Tag">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="IDTag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="USP_GetTagsByAPIId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="apiid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GetVoiceAuthorsByAPIId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="apiid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GetVoiceByAPIId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="apiid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadApplicationAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadAuthorAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDFacebook" Type="nvarchar" Mode="In" />
+          <Parameter Name="IDTwitter" Type="nvarchar" Mode="In" />
+          <Parameter Name="IDGoogle" Type="nvarchar" Mode="In" />
+          <Parameter Name="IDInstagram" Type="nvarchar" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadChapterAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDApp" Type="int" Mode="In" />
+          <Parameter Name="Title" Type="nvarchar" Mode="In" />
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadChapterDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadChapterEdit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="IDApp" Type="int" Mode="In" />
+          <Parameter Name="Title" Type="nvarchar" Mode="In" />
+          <Parameter Name="ModifiedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadVoiceAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AuthorID" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="Image" Type="nvarchar" Mode="In" />
+          <Parameter Name="Video" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="TagID" Type="int" Mode="In" />
+          <Parameter Name="IDChapter" Type="int" Mode="In" />
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_GoldenThreadVoiceEdit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="AuthorID" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="Image" Type="nvarchar" Mode="In" />
+          <Parameter Name="Video" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="IDChapter" Type="int" Mode="In" />
+          <Parameter Name="CreatedBy" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="GoldenThreadModelStoreContainer">
+          <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Author" EntityType="Self.Author" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Chapter" EntityType="Self.Chapter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Voice" EntityType="Self.Voice" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Author_User" Association="Self.FK_Author_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Author" EntitySet="Author" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chapter_Application" Association="Self.FK_Chapter_Application">
+            <End Role="Application" EntitySet="Application" />
+            <End Role="Chapter" EntitySet="Chapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Author" Association="Self.FK_Voice_Author">
+            <End Role="Author" EntitySet="Author" />
+            <End Role="Voice" EntitySet="Voice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Chapter" Association="Self.FK_Voice_Chapter">
+            <End Role="Chapter" EntitySet="Chapter" />
+            <End Role="Voice" EntitySet="Voice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Tag" Association="Self.FK_Voice_Tag">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="Voice" EntitySet="Voice" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GoldenThreadModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDFacebook" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IDTwitter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IDGoogle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IDInstagram" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Author_User" FromRole="Author" ToRole="User" />
+          <NavigationProperty Name="Voices" Relationship="Self.FK_Voice_Author" FromRole="Author" ToRole="Voice" />
+        </EntityType>
+        <EntityType Name="Chapter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDApp" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Voices" Relationship="Self.FK_Voice_Chapter" FromRole="Chapter" ToRole="Voice" />
+          <NavigationProperty Name="Application" Relationship="GoldenThreadModel.FK_Chapter_Application" FromRole="Chapter" ToRole="Application" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tag1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <NavigationProperty Name="Voices" Relationship="Self.FK_Voice_Tag" FromRole="Tag" ToRole="Voice" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SALT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <NavigationProperty Name="Authors" Relationship="Self.FK_Author_User" FromRole="User" ToRole="Author" />
+        </EntityType>
+        <EntityType Name="Voice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthorID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Video" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IDChapter" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifyBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="IDTag" Type="Int32" />
+          <NavigationProperty Name="Author" Relationship="Self.FK_Voice_Author" FromRole="Voice" ToRole="Author" />
+          <NavigationProperty Name="Chapter" Relationship="Self.FK_Voice_Chapter" FromRole="Voice" ToRole="Chapter" />
+          <NavigationProperty Name="Tag" Relationship="Self.FK_Voice_Tag" FromRole="Voice" ToRole="Tag" />
+        </EntityType>
+        <Association Name="FK_Author_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Author" Type="Self.Author" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Author">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Author">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Chapter">
+          <End Role="Chapter" Type="Self.Chapter" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chapter">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="IDChapter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voice_Tag">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="0..1" />
+          <End Role="Voice" Type="Self.Voice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Voice">
+              <PropertyRef Name="IDTag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GoldenThreadEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Authors" EntityType="Self.Author" />
+          <EntitySet Name="Chapters" EntityType="Self.Chapter" />
+          <EntitySet Name="Tags" EntityType="Self.Tag" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Voices" EntityType="Self.Voice" />
+          <AssociationSet Name="FK_Author_User" Association="Self.FK_Author_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Author" EntitySet="Authors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Author" Association="Self.FK_Voice_Author">
+            <End Role="Author" EntitySet="Authors" />
+            <End Role="Voice" EntitySet="Voices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Chapter" Association="Self.FK_Voice_Chapter">
+            <End Role="Chapter" EntitySet="Chapters" />
+            <End Role="Voice" EntitySet="Voices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voice_Tag" Association="Self.FK_Voice_Tag">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="Voice" EntitySet="Voices" />
+          </AssociationSet>
+          <FunctionImport Name="USP_GetTagsByAPIId" ReturnType="Collection(GoldenThreadModel.USP_GetTagsByAPIId_Result)">
+          <Parameter Name="apiid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GetVoiceAuthorsByAPIId" ReturnType="Collection(GoldenThreadModel.USP_GetVoiceAuthorsByAPIId_Result)">
+          <Parameter Name="apiid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadApplicationAdd">
+          <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadAuthorAdd">
+            <Parameter Name="IDFacebook" Mode="In" Type="String" />
+            <Parameter Name="IDTwitter" Mode="In" Type="String" />
+            <Parameter Name="IDGoogle" Mode="In" Type="String" />
+            <Parameter Name="IDInstagram" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadChapterAdd">
+            <Parameter Name="IDApp" Mode="In" Type="Int32" />
+            <Parameter Name="Title" Mode="In" Type="String" />
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadVoiceAdd">
+            <Parameter Name="AuthorID" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="Image" Mode="In" Type="String" />
+            <Parameter Name="Video" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="TagID" Mode="In" Type="Int32" />
+            <Parameter Name="IDChapter" Mode="In" Type="Int32" />
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadVoiceEdit">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="AuthorID" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="Image" Mode="In" Type="String" />
+            <Parameter Name="Video" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="IDChapter" Mode="In" Type="Int32" />
+            <Parameter Name="CreatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Applications" EntityType="GoldenThreadModel.Application" />
+          <AssociationSet Name="FK_Chapter_Application" Association="GoldenThreadModel.FK_Chapter_Application">
+            <End Role="Application" EntitySet="Applications" />
+            <End Role="Chapter" EntitySet="Chapters" />
+          </AssociationSet>
+          <FunctionImport Name="USP_GetVoiceByAPIId" ReturnType="Collection(GoldenThreadModel.USP_GetVoiceByAPIId_Result)">
+            <Parameter Name="apiid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadChapterDelete">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GoldenThreadChapterEdit">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="IDApp" Mode="In" Type="Int32" />
+            <Parameter Name="Title" Mode="In" Type="String" />
+            <Parameter Name="ModifiedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="USP_GetTagsByAPIId_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Tag" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="CreatedBy" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="USP_GetVoiceAuthorsByAPIId_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="AuthorID" Nullable="true" />
+          <Property Type="Int32" Name="CreatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IDFacebook" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="IDGoogle" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="IDInstagram" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="IDTwitter" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="APIKey" Type="Guid" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <NavigationProperty Name="Chapters" Relationship="GoldenThreadModel.FK_Chapter_Application" FromRole="Application" ToRole="Chapter" />
+        </EntityType>
+        <Association Name="FK_Chapter_Application">
+          <End Type="GoldenThreadModel.Application" Role="Application" Multiplicity="1" />
+          <End Type="GoldenThreadModel.Chapter" Role="Chapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chapter">
+              <PropertyRef Name="IDApp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="USP_GetVoiceByAPIId_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="AuthorID" Nullable="true" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="IDChapter" Nullable="true" />
+          <Property Type="String" Name="Image" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Tag" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Text" Nullable="true" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Video" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GoldenThreadModelStoreContainer" CdmEntityContainer="GoldenThreadEntities">
+          <EntitySetMapping Name="Authors">
+            <EntityTypeMapping TypeName="GoldenThreadModel.Author">
+              <MappingFragment StoreEntitySet="Author">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IDFacebook" ColumnName="IDFacebook" />
+                <ScalarProperty Name="IDTwitter" ColumnName="IDTwitter" />
+                <ScalarProperty Name="IDGoogle" ColumnName="IDGoogle" />
+                <ScalarProperty Name="IDInstagram" ColumnName="IDInstagram" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chapters">
+            <EntityTypeMapping TypeName="GoldenThreadModel.Chapter">
+              <MappingFragment StoreEntitySet="Chapter">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDApp" ColumnName="IDApp" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="GoldenThreadModel.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tag1" ColumnName="Tag" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="GoldenThreadModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="SALT" ColumnName="SALT" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voices">
+            <EntityTypeMapping TypeName="GoldenThreadModel.Voice">
+              <MappingFragment StoreEntitySet="Voice">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Video" ColumnName="Video" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="IDChapter" ColumnName="IDChapter" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="IDTag" ColumnName="IDTag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_GetTagsByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetTagsByAPIId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetTagsByAPIId_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_GetVoiceAuthorsByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetVoiceAuthorsByAPIId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetVoiceAuthorsByAPIId_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IDFacebook" ColumnName="IDFacebook" />
+                <ScalarProperty Name="IDGoogle" ColumnName="IDGoogle" />
+                <ScalarProperty Name="IDInstagram" ColumnName="IDInstagram" />
+                <ScalarProperty Name="IDTwitter" ColumnName="IDTwitter" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadApplicationAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadApplicationAdd" />
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadAuthorAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadAuthorAdd" />
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterAdd" />
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadVoiceAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadVoiceAdd" />
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadVoiceEdit" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadVoiceEdit" />
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="GoldenThreadModel.Application">
+              <MappingFragment StoreEntitySet="Application">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="APIKey" ColumnName="APIKey" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_GetVoiceByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetVoiceByAPIId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetVoiceByAPIId_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IDChapter" ColumnName="IDChapter" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Video" ColumnName="Video" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterDelete" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterDelete" />
+          <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterEdit" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterEdit" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

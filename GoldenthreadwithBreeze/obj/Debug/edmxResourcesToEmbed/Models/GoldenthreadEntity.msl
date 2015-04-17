@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GoldenThreadModelStoreContainer" CdmEntityContainer="GoldenThreadEntities">
+    <EntitySetMapping Name="Authors">
+      <EntityTypeMapping TypeName="GoldenThreadModel.Author">
+        <MappingFragment StoreEntitySet="Author">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="IDFacebook" ColumnName="IDFacebook" />
+          <ScalarProperty Name="IDTwitter" ColumnName="IDTwitter" />
+          <ScalarProperty Name="IDGoogle" ColumnName="IDGoogle" />
+          <ScalarProperty Name="IDInstagram" ColumnName="IDInstagram" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chapters">
+      <EntityTypeMapping TypeName="GoldenThreadModel.Chapter">
+        <MappingFragment StoreEntitySet="Chapter">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="IDApp" ColumnName="IDApp" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="GoldenThreadModel.Tag">
+        <MappingFragment StoreEntitySet="Tag">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Tag1" ColumnName="Tag" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="GoldenThreadModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="SALT" ColumnName="SALT" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Voices">
+      <EntityTypeMapping TypeName="GoldenThreadModel.Voice">
+        <MappingFragment StoreEntitySet="Voice">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Video" ColumnName="Video" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="IDChapter" ColumnName="IDChapter" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="IDTag" ColumnName="IDTag" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="USP_GetTagsByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetTagsByAPIId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetTagsByAPIId_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Tag" ColumnName="Tag" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="USP_GetVoiceAuthorsByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetVoiceAuthorsByAPIId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetVoiceAuthorsByAPIId_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IDFacebook" ColumnName="IDFacebook" />
+          <ScalarProperty Name="IDGoogle" ColumnName="IDGoogle" />
+          <ScalarProperty Name="IDInstagram" ColumnName="IDInstagram" />
+          <ScalarProperty Name="IDTwitter" ColumnName="IDTwitter" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadApplicationAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadApplicationAdd" />
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadAuthorAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadAuthorAdd" />
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterAdd" />
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadVoiceAdd" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadVoiceAdd" />
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadVoiceEdit" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadVoiceEdit" />
+    <EntitySetMapping Name="Applications">
+      <EntityTypeMapping TypeName="GoldenThreadModel.Application">
+        <MappingFragment StoreEntitySet="Application">
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="APIKey" ColumnName="APIKey" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="USP_GetVoiceByAPIId" FunctionName="GoldenThreadModel.Store.USP_GetVoiceByAPIId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GoldenThreadModel.USP_GetVoiceByAPIId_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IDChapter" ColumnName="IDChapter" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Tag" ColumnName="Tag" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Video" ColumnName="Video" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterDelete" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterDelete" />
+    <FunctionImportMapping FunctionImportName="USP_GoldenThreadChapterEdit" FunctionName="GoldenThreadModel.Store.USP_GoldenThreadChapterEdit" />
+  </EntityContainerMapping>
+</Mapping>

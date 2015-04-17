@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html data-ng-app="app">
+<head>
+    <title></title>
+
+</head>
+
+<body data-ng-controller="TodoController as vm">
+    <script src="~/Scripts/q.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+
+    <script src="https://rawgithub.com/Breeze/breeze.js/master/build/breeze.debug.js"></script>
+    <script src="https://rawgithub.com/Breeze/breeze.js/master/build/adapters/breeze.bridge.angular.js"></script>
+
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/App/main.js"></script>
+    <script src="~/App/controller.js"></script>
+    <script src="~/App/dataservice.js"></script>
+    <script src="~/Scripts/breeze.metadata-helper.js"></script>
+    <!-- The App -->
+    <script src="~/App/logger.js"></script>
+    <script src="~/App/toastr.js"></script>
+    <script src="~/Scripts/breeze.directives.js"></script>
+    <script src="~/Scripts/respond.js"></script>
+    <script src="~/Scripts/angular-mocks.js"></script>
+    <script src="~/Scripts/angular-resource.js"></script>
+   
+    <div>
+        <ul>
+            <li data-ng-repeat="item in vm.items ">
+                {{item.ID}} | {{item.Title}}
+            </li>
+        </ul>
+
+    </div>
+
+    @*<div ng-controller="LearnCtrl">
+        <p ng-show="!results">Fetching...</p>
+        <li ng-show="results" ng-repeat="result in results">
+            <span>{{result.ID}}</span>
+            <span>{{result.LastName}}</span>
+        </li>
+    </div>
+
+    <script>
+    breeze.config.initializeAdapterInstance( "modelLibrary", "backingStore");
+
+    app.controller("LearnCtrl", function($scope) {
+        var manager = new breeze.EntityManager('http://localhost:51341/api/Chapters/Get');
+
+    var query = new breeze.EntityQuery()
+    .from("Chapter");
+
+    manager.executeQuery(query).then(function(data){
+    $scope.results = data.results;
+    $scope.$apply();
+    }).fail(function(e) {
+    alert(e);
+    });
+    });
+    </script>*@
+</body>
+</html>
+
